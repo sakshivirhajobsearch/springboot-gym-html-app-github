@@ -1,15 +1,13 @@
-# Use build argument to select base image, default to Eclipse Temurin Java 17 JDK
-ARG BASE_IMAGE=eclipse-temurin:17-jdk
-FROM ${BASE_IMAGE}
-
-# Set working directory inside the container
+# Use a Maven image to build the app
+FROM maven:3.9.5-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the Spring Boot fat jar into the container
-COPY target/*.jar app.jar
+# Use a lightweight JRE for runtime
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Expose the port your app listens on (default Spring Boot port 8080)
-EXPOSE 8080
-
-# Run the Spring Boot application
+# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]

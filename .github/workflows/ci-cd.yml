@@ -1,66 +1,31 @@
-name: CI/CD Pipeline
+name: Docker CI/CD
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    tags:
+      - 'v*.*.*'  # Trigger on version tags like v1.0.0
 
 jobs:
-  build_and_deploy:
+  docker:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven
+    - name: Log in to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build with Maven (skip tests for packaging)
-        run: mvn clean package -DskipTests
-
-      - name: Run Unit Tests
-        run: mvn test
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build Docker image
-        run: |
-          ls -l target/*.jar
-          docker build --build-arg BASE_IMAGE=eclipse-temurin:17-jdk \
-            -t ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app-github:latest .
-
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app-github:latest
-
-      - name: Log out from DockerHub
-        run: docker logout
-
-      - name: Run container and validate
-        run: |
-          docker rm -f gym-app || true
-          docker run -d -p 8080:8080 --name gym-app ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app-github:latest
-
-          echo "Waiting for app to start..."
-          sleep 20
-
-          echo "Checking app health..."
-          curl --fail http://localhost:8080 || (echo "App not reachable" && docker logs gym-app && exit 1)
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/gym-app:latest
