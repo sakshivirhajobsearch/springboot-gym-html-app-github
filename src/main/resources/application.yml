@@ -1,16 +1,25 @@
+# ======================
+# Server Configuration
+# ======================
 server:
-  address: 0.0.0.0
-  port: 8081
+  address: 0.0.0.0       # Listen on all interfaces
+  port: 8081             # Application will run on port 8081
 
+# ======================
+# Thymeleaf Configuration
+# ======================
 spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
     mode: HTML
     encoding: UTF-8
-    cache: false
+    cache: false         # Disable template caching for development
 
-  # Error reporting
-server.error:
-  include-message: always
-  include-binding-errors: always
+# ======================
+# Error Handling
+# ======================
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
