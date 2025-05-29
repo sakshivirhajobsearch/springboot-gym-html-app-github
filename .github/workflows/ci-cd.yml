@@ -46,16 +46,16 @@ jobs:
       run: |
         # Ensure JAR exists
         ls -l target/*.jar
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app .
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app-github .
 
     - name: Push Docker image
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app
+        docker push ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app-github
 
     - name: Run container and validate (only inside runner)
       run: |
         docker rm -f gym-app || true
-        docker run -d -p 8080:8080 --name gym-app ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app
+        docker run -d -p 8080:8080 --name gym-app ${{ secrets.DOCKER_USERNAME }}/springboot-gym-html-app-github
 
         echo "Waiting for app to start..."
         sleep 20
