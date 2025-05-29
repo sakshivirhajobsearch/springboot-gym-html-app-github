@@ -6,7 +6,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.example.springboothtmlapp.SpringBootGYMHtmlAppApplication;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ContextConfiguration(classes = SpringBootGYMHtmlAppApplication.class)
 public class SpringBootGYMHtmlAppApplicationTests {
 	@Test
