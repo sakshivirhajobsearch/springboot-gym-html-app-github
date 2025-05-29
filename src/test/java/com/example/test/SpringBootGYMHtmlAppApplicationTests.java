@@ -2,14 +2,15 @@ package com.example.test;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 
+// Make sure this import matches the actual package of your main application class
 import com.example.springboothtmlapp.SpringBootGYMHtmlAppApplication;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@ContextConfiguration(classes = SpringBootGYMHtmlAppApplication.class)
+@SpringBootTest(classes = SpringBootGYMHtmlAppApplication.class)
 public class SpringBootGYMHtmlAppApplicationTests {
+
 	@Test
 	void contextLoads() {
+		// This test ensures the Spring context loads without issues.
 	}
 }
