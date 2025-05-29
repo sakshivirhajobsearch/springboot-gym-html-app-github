@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: runs-on: [self-hosted, Linux, X64] # changed from ubuntu-latest to self-hosted
+    runs-on: [self-hosted, Linux, X64] # fixed syntax
 
     steps:
       - name: Checkout source code
