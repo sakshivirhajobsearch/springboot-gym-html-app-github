@@ -1,0 +1,16 @@
+server:
+  address: 0.0.0.0
+  port: 8080
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+
+  # Error reporting
+server.error:
+  include-message: always
+  include-binding-errors: always
