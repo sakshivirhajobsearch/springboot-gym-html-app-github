@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Something Went Wrong</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #fce4e4;
+			color: #b71c1c;
+			padding: 50px;
+			text-align: center;
+		}
+
+		h1 {
+			font-size: 48px;
+		}
+
+		p {
+			font-size: 20px;
+		}
+
+		.details {
+			margin-top: 20px;
+			font-size: 16px;
+			color: #5d4037;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Oops! Something went wrong.</h1>
+	<p>We encountered an unexpected error.</p>
+
+	<div class="details">
+		<p th:if="${message != null}">
+			<strong>Error Message:</strong> <span th:text="${message}">Error details here</span>
+		</p>
+		<p th:if="${status != null}">
+			<strong>Status:</strong> <span th:text="${status}">500</span>
+		</p>
+		<p th:if="${timestamp != null}">
+			<strong>Timestamp:</strong> <span th:text="${timestamp}">2025-04-11T00:00</span>
+		</p>
+	</div>
+
+	<p><a href="/" style="color: #d32f2f;">Go back to home</a></p>
+</body>
+
+</html>
